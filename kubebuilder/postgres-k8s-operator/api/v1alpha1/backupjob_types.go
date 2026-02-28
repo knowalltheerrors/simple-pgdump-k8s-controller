@@ -15,7 +15,8 @@ type PostgresSpec struct {
 	Database          string       `json:"database"`
 	Username          string       `json:"username"`
 	PasswordSecretRef SecretKeyRef `json:"passwordSecretRef"`
-	SSLMode           string       `json:"sslMode,omitempty"` // disable, require, verify-ca, verify-full
+	// currently only disable and require is supported ! (No verify supported, will be added ASAP.)
+	SSLMode string `json:"sslMode,omitempty"` // disable, require, verify-ca, verify-full
 }
 
 type StorageSpec struct {
