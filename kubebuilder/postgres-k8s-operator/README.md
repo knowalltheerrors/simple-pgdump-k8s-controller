@@ -190,7 +190,7 @@ kubectl logs -n default job/demo-backup-1 -c backup-runner
 
 ---
 
-## Notes on HTTPS (MinIO/Scality)
+## Notes on HTTPS
 If your S3-compatible endpoint uses a **self-signed** or **internal CA** certificate, your backup-runner container must trust that CA.
 Recommended approach: Put your internal CA into the backup-runner image and run `update-ca-certificates` during image build.
 
