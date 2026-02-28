@@ -135,6 +135,29 @@ kubectl logs -n default job/<job-name> -c backup-runner
 > Update the placeholders (`<your-user>`, Postgres host/db/user, secrets, endpoint) to match your environment.
 
 ```yaml
+
+# secret for objectstorage
+apiVersion: v1
+kind: Secret
+metadata:
+  name: objectstore-secret
+  namespace: default
+type: Opaque
+stringData:
+  accessKey: "xxxxxxxxxxxxxxx"
+  secretKey: "xxxxxxxxxxxxxxx"
+
+# secret for postgres database
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-conn-secret
+  namespace: default
+type: Opaque
+stringData:
+  password: "xxxxxx"
+
+# CR
 apiVersion: dbops.example.com/v1alpha1
 kind: BackupJob
 metadata:
