@@ -1,4 +1,3 @@
-# Build Go binary
 FROM golang:1.25.3 AS builder
 
 # Build Go binary
