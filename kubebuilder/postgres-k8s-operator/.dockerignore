@@ -1,0 +1,15 @@
+# ignore everything by default
+**
+
+# include go module files
+!go.mod
+!go.sum
+
+# include source trees needed to build the manager
+!cmd/**
+!api/**
+!internal/**
+
+# include Go files (but exclude tests)
+!**/*.go
+**/*_test.go
