@@ -63,8 +63,6 @@ Build and push the operator image using Kubebuilder’s Makefile:
 make docker-build docker-push IMG=docker.io/<your-user>/pgdump-k8s-operator:latest
 ```
 
-> Tip: Using immutable tags (e.g. `v0.1.0`) is better than `latest` for production.
-
 ---
 
 ## Deploy the operator into the cluster (kustomize)
@@ -102,11 +100,17 @@ docker build -t docker.io/<your-user>/postgres-backup-runner:latest -f PostgresR
 docker push docker.io/<your-user>/postgres-backup-runner:latest
 ```
 
+> Tip: If you dont want to deal with building image though there is another folder named postgres_go_image, you can omit that part cause I have already added my publicly avaliable image inside controller you can check it out ! :)
+
+> pg_dump version should be compatible with postgres version.
+
+
 In your `BackupJob` CR, set:
 
 ```yaml
 spec:
   image: docker.io/<your-user>/postgres-backup-runner:latest
+  # or you can use mine docker.io/coderunner777/pgdumpk8s:latest (publicly avaliable)
 ```
 
 ---
