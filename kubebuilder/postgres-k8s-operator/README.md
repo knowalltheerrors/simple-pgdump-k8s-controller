@@ -124,12 +124,70 @@ kubectl get jobs -n default
 kubectl logs -n default job/<job-name> -c backup-runner
 ```
 
+---
 
-## Notes on HTTPS (MinIO/Scality)
-If your S3-compatible endpoint uses a **self-signed** or **internal CA** certificate, your backup-runner container must trust that CA.
-Recommended approach: bake your internal CA into the backup-runner image and run `update-ca-certificates` during image build.
+## Example `BackupJob` CR
+
+> Update the placeholders (`<your-user>`, Postgres host/db/user, secrets, endpoint) to match your environment.
+
+```yaml
+apiVersion: dbops.example.com/v1alpha1
+kind: BackupJob
+metadata:
+  name: demo-backup
+  namespace: default
+spec:
+  # backup-runner image (this is not operator/controller image)
+  image: docker.io/<your-user>/postgres-backup-runner:latest
+
+  postgres:
+    host: postgres.default.svc.cluster.local   # or external hostname/IP
+    port: 5432
+    database: mydb
+    username: myuser
+    sslMode: disable
+    passwordSecretRef:
+      name: pg-conn-secret
+      key: password
+
+  storage:
+    provider: s3
+    bucket: pg-backups
+    prefix: demo
+    # For AWS S3 you can omit endpoint; for MinIO/Scality set it:
+    endpoint: "https://minio.minio.svc.cluster.local:9000"
+    region: us-east-1
+    forcePathStyle: true
+    accessKeySecretRef:
+      name: objectstore-secret
+      key: accessKey
+    secretKeySecretRef:
+      name: objectstore-secret
+      key: secretKey
+
+  # Kubernetes will delete the Job after it finishes (seconds)
+  ttlSecondsAfterFinished: 300
+```
+
+Apply it:
+
+```bash
+kubectl apply -f backupjob.yaml
+```
+
+Watch status and Jobs:
+
+```bash
+kubectl get backupjobs -n default
+kubectl get jobs -n default
+kubectl get pods -n default -l job-name=demo-backup-1
+kubectl logs -n default job/demo-backup-1 -c backup-runner
+```
 
 ---
 
-## License
-MIT (or choose your preferred license)
+## Notes on HTTPS (MinIO/Scality)
+If your S3-compatible endpoint uses a **self-signed** or **internal CA** certificate, your backup-runner container must trust that CA.
+Recommended approach: Put your internal CA into the backup-runner image and run `update-ca-certificates` during image build.
+
+---
