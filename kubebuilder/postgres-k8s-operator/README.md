@@ -1,7 +1,7 @@
 # postgres-k8s-operator
 
 ## Overview
-`postgres-k8s-operator` is a simple Kubernetes operator (Kubebuilder/controller-runtime in Go) that watches `BackupJob` Custom Resources and creates a Kubernetes `batch/v1 Job` to run `pg_dump` against a PostgreSQL database (either inside the cluster or external). The dump is then uploaded to **S3-compatible object storage** such as **AWS S3**, **MinIO**, or **Scality RING**.
+`postgres-k8s-operator` is a simple Kubernetes operator (Kubebuilder/controller-runtime in Go) that watches `BackupJob` Custom Resources and creates a Kubernetes `batch/v1 Job` to run `pg_dump` against a PostgreSQL database (either inside the cluster or external). The dump is then uploaded to **S3-compatible object storage** such as **AWS S3**, **MinIO**, or **Scality RING**, etc.
 
 ---
 
