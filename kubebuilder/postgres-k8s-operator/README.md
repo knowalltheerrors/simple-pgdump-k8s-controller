@@ -73,6 +73,9 @@ cd config/default
 kustomize edit set image controller=docker.io/<your-user>/pgdump-k8s-operator:latest
 ```
 
+> I have also included my publicly avaliable image inside config/default/kustomization.yaml (check it out ! if you dont want to build image on yourself :)
+
+
 Now apply the deployment + RBAC + namespace + metrics service:
 
 ```bash
