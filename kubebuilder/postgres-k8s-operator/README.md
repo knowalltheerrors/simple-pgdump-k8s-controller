@@ -113,7 +113,7 @@ In your `BackupJob` CR, set:
 ```yaml
 spec:
   image: docker.io/<your-user>/postgres-backup-runner:latest
-  # or you can use mine docker.io/coderunner777/pgdumpk8s:latest (publicly avaliable)
+  # or you can use mine docker.io/coderunner777/pgdumpk8s:v1.0.0 (publicly avaliable with postgres 18)
 ```
 
 ---
