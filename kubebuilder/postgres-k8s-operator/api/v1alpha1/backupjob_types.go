@@ -48,6 +48,10 @@ type BackupJobSpec struct {
 
 	// Optional SA for the k8s Job pod
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
+
+	// Extra environment variables to pass to the backup Job pod.
+	// Example usage: HTTP_PROXY / HTTPS_PROXY / NO_PROXY.
+	ExtraEnv map[string]string `json:"extraEnv,omitempty"`
 }
 
 type BackupPhase string

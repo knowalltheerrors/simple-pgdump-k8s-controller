@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"sort"
 	"strings"
 	"time"
 
@@ -188,6 +189,18 @@ func (r *BackupJobReconciler) buildK8sJob(cr *dbopsv1alpha1.BackupJob, jobName, 
 		},
 	}
 
+	// Extra env from CR (useful for HTTP_PROXY/HTTPS_PROXY/NO_PROXY)
+	if len(cr.Spec.ExtraEnv) > 0 {
+		keys := make([]string, 0, len(cr.Spec.ExtraEnv))
+		for k := range cr.Spec.ExtraEnv {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			env = append(env, corev1.EnvVar{Name: k, Value: cr.Spec.ExtraEnv[k]})
+		}
+	}
+
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      jobName,
@@ -207,7 +220,7 @@ func (r *BackupJobReconciler) buildK8sJob(cr *dbopsv1alpha1.BackupJob, jobName, 
 					Containers: []corev1.Container{
 						{
 							Name:            "backup-runner",
-							Image:           defaultString(cr.Spec.Image, "docker.io/coderunner777/pgdumpk8s:latest"),
+							Image:           defaultString(cr.Spec.Image, "docker.io/coderunner777/pgdumpk8s:v1.0.0"),
 							ImagePullPolicy: corev1.PullIfNotPresent,
 							Env:             env,
 						},
@@ -269,7 +282,6 @@ func isJobFailed(job *batchv1.Job) bool {
 			return true
 		}
 	}
-
 	return false
 }
 

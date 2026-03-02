@@ -39,6 +39,13 @@ spec:
             type: object
           spec:
             properties:
+              extraEnv:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Extra environment variables to pass to the backup Job pod.
+                  Example usage: HTTP_PROXY / HTTPS_PROXY / NO_PROXY.
+                type: object
               image:
                 description: Backup runner image (contains pg_dump + Go backup binary)
                 type: string
@@ -62,6 +69,8 @@ spec:
                     format: int32
                     type: integer
                   sslMode:
+                    description: currently only disable and require is supported !
+                      (No verify supported, will be added ASAP.)
                     type: string
                   username:
                     type: string
